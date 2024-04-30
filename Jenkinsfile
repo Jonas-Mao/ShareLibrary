@@ -6,58 +6,47 @@ def tools = new org.devops.tools()
 
 String workspace = "/var/lib/jenkins/workspace"
 
-
-//Pipeline
 pipeline {
-    
     agent any
-    
     options {
         timestamps()  //日志会有时间
         skipDefaultCheckout()  //删除隐式checkout scm语句
-        //disableConcurrentBuilds() //禁止并行
         timeout(time: 1, unit: 'HOURS')  //流水线超时设置1h
     }
 
     stages {
-        //下载代码
-        stage("GetCode"){ //阶段名称
-            steps{  //步骤
-                timeout(time:5, unit:"MINUTES"){   //步骤超时时间
-                    script{ //填写运行代码
+        stage("GetCode"){ 
+                timeout(time:5, unit:"MINUTES"){
+                    script{
                         println('获取代码')
                         tools.PrintMes("获取代码",'green')                     
                     }
                 }
             }
+
+            stage("Build"){
+                steps{
+                     timeout(time:20, unit:"MINUTES"){
+                        script{
+                            println('应用打包')
+                            tools.PrintMes("应用打包",'green')
+                        }
+                    }
+                }
+            }
+        
+            stage("CodeScan"){
+                steps{
+                    timeout(time:30, unit:"MINUTES"){
+                        script{
+                            print("代码扫描")
+                            tools.PrintMes("代码扫描",'green')
+                        }
+                    }
+                }
+            }
         }
 
-
-                stage("Build"){
-                    steps{
-                        timeout(time:20, unit:"MINUTES"){
-                            script{
-                                println('应用打包')
-                                tools.PrintMes("应用打包",'green')
-                            }
-                        }
-                    }
-                }
-        
-                //代码扫描
-                stage("CodeScan"){
-                    steps{
-                        timeout(time:30, unit:"MINUTES"){
-                            script{
-                                print("代码扫描")
-                                tools.PrintMes("代码扫描",'green')
-                            }
-                        }
-                    }
-                }
-
-
-    //构建后操作
     post {
         always {
             script{
