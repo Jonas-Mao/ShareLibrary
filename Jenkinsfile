@@ -32,11 +32,7 @@ pipeline {
             }
         }
 
-        stage("01"){
-            failFast true
-            parallel {
-        
-                //构建
+
                 stage("Build"){
                     steps{
                         timeout(time:20, unit:"MINUTES"){
@@ -59,9 +55,7 @@ pipeline {
                         }
                     }
                 }
-            }
-        }
-    }
+
 
     //构建后操作
     post {
