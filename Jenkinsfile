@@ -16,10 +16,12 @@ pipeline {
 
     stages {
         stage("GetCode"){ 
+            steps{
                 timeout(time:5, unit:"MINUTES"){
                     script{
                         println('获取代码')
-                        tools.PrintMes("获取代码",'green')                     
+                        tools.PrintMes("获取代码",'green') 
+                        }
                     }
                 }
             }
